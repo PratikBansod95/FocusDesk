@@ -1,0 +1,295 @@
+/* Liquid Glass UI — only when uiStyle is liquid-glass */
+
+html[data-ui-style='liquid-glass'] .app-bg,
+html:not([data-ui-style]) .app-bg {
+  background: var(--mesh-base);
+  overflow: hidden;
+}
+
+html[data-ui-style='liquid-glass'] .orb,
+html:not([data-ui-style]) .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.85;
+  animation: orb-drift 22s ease-in-out infinite alternate;
+}
+
+html[data-ui-style='liquid-glass'] .orb--violet,
+html:not([data-ui-style]) .orb--violet {
+  width: 420px;
+  height: 420px;
+  background: #a855f7;
+  top: -8%;
+  left: -6%;
+}
+
+html[data-ui-style='liquid-glass'] .orb--cyan,
+html:not([data-ui-style]) .orb--cyan {
+  width: 380px;
+  height: 380px;
+  background: #2dd4bf;
+  top: 12%;
+  right: -4%;
+  animation-delay: -6s;
+}
+
+html[data-ui-style='liquid-glass'] .orb--peach,
+html:not([data-ui-style]) .orb--peach {
+  width: 320px;
+  height: 320px;
+  background: #fdba74;
+  bottom: 5%;
+  left: 18%;
+  animation-delay: -12s;
+}
+
+html[data-ui-style='liquid-glass'] .orb--pink,
+html:not([data-ui-style]) .orb--pink {
+  width: 280px;
+  height: 280px;
+  background: #f472b6;
+  bottom: -6%;
+  right: 22%;
+  animation-delay: -4s;
+}
+
+@keyframes orb-drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(24px, -18px) scale(1.06);
+  }
+}
+
+html[data-ui-style='liquid-glass'] .app-viewport,
+html:not([data-ui-style]) .app-viewport {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding: 0.85rem 1rem 1rem;
+  box-sizing: border-box;
+}
+
+html[data-ui-style='liquid-glass'] .glass-chassis,
+html:not([data-ui-style]) .glass-chassis {
+  width: 100%;
+  max-width: 1520px;
+  margin: 0 auto;
+  min-height: calc(100vh - 1.85rem);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-chassis);
+  backdrop-filter: blur(var(--glass-blur-heavy)) var(--glass-saturate);
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy)) var(--glass-saturate);
+  box-shadow: var(--glass-rim), var(--glow-soft), var(--shadow-lg);
+  overflow: hidden;
+}
+
+html[data-ui-style='liquid-glass'] .btn--primary,
+html:not([data-ui-style]) .btn--primary {
+  background: var(--gradient-primary);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--glass-rim), var(--glow-primary);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+html[data-ui-style='liquid-glass'] .btn--primary:hover,
+html:not([data-ui-style]) .btn--primary:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+html[data-ui-style='liquid-glass'] .btn--secondary,
+html:not([data-ui-style]) .btn--secondary {
+  background: var(--glass-bg);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--glass-rim);
+  backdrop-filter: blur(10px) var(--glass-saturate);
+}
+
+html[data-ui-style='liquid-glass'] .btn--fab,
+html:not([data-ui-style]) .btn--fab {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-rim), var(--shadow);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--primary);
+}
+
+html[data-ui-style='liquid-glass'] .input,
+html[data-ui-style='liquid-glass'] .header__search,
+html:not([data-ui-style]) .input,
+html:not([data-ui-style]) .header__search {
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-border);
+  background: var(--input-bg);
+  backdrop-filter: blur(12px) var(--glass-saturate);
+  box-shadow: var(--glass-rim);
+}
+
+html[data-ui-style='liquid-glass'] .input:focus,
+html:not([data-ui-style]) .input:focus {
+  border-color: rgba(167, 139, 250, 0.65);
+  box-shadow: var(--glass-rim), 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+html[data-ui-style='liquid-glass'] .hero-glass,
+html:not([data-ui-style]) .hero-glass {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.5rem;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: var(--gradient-hero);
+  box-shadow: var(--glow-primary), var(--shadow-lg);
+}
+
+html[data-ui-style='liquid-glass'] .hero-glass::before,
+html:not([data-ui-style]) .hero-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 42%);
+  pointer-events: none;
+}
+
+html[data-ui-style='liquid-glass'] .hero-glass__title,
+html:not([data-ui-style]) .hero-glass__title {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+html[data-ui-style='liquid-glass'] .hero-glass__text,
+html:not([data-ui-style]) .hero-glass__text {
+  margin: 0.4rem 0 0;
+  opacity: 0.92;
+  font-size: 0.92rem;
+  max-width: 36rem;
+}
+
+html[data-ui-style='liquid-glass'] .stat-card,
+html:not([data-ui-style]) .stat-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) var(--glass-saturate);
+  box-shadow: var(--glass-rim), var(--shadow);
+}
+
+html[data-ui-style='liquid-glass'] .stat-card:nth-child(1),
+html:not([data-ui-style]) .stat-card:nth-child(1) {
+  background: linear-gradient(145deg, rgba(167, 139, 250, 0.22), rgba(255, 255, 255, 0.45));
+}
+html[data-ui-style='liquid-glass'] .stat-card:nth-child(2),
+html:not([data-ui-style]) .stat-card:nth-child(2) {
+  background: linear-gradient(145deg, rgba(45, 212, 191, 0.2), rgba(255, 255, 255, 0.45));
+}
+html[data-ui-style='liquid-glass'] .stat-card:nth-child(3),
+html:not([data-ui-style]) .stat-card:nth-child(3) {
+  background: linear-gradient(145deg, rgba(251, 113, 133, 0.18), rgba(255, 255, 255, 0.45));
+}
+html[data-ui-style='liquid-glass'] .stat-card:nth-child(4),
+html:not([data-ui-style]) .stat-card:nth-child(4) {
+  background: linear-gradient(145deg, rgba(129, 140, 248, 0.2), rgba(255, 255, 255, 0.45));
+}
+
+html[data-ui-style='liquid-glass'][data-theme='dark'] .stat-card:nth-child(n),
+html:not([data-ui-style])[data-theme='dark'] .stat-card:nth-child(n) {
+  background: var(--glass-bg);
+}
+
+html[data-ui-style='liquid-glass'] .chip-row,
+html:not([data-ui-style]) .chip-row {
+  padding: 0.35rem;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border-subtle);
+  backdrop-filter: blur(12px);
+}
+
+html[data-ui-style='liquid-glass'] .chip,
+html:not([data-ui-style]) .chip {
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+
+html[data-ui-style='liquid-glass'] .chip--active,
+html:not([data-ui-style]) .chip--active {
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--primary);
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.15), inset 0 -2px 0 var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+
+html[data-ui-style='liquid-glass'] .card,
+html[data-ui-style='liquid-glass'] .project-card,
+html[data-ui-style='liquid-glass'] .tasks-toolbar,
+html:not([data-ui-style]) .card,
+html:not([data-ui-style]) .project-card,
+html:not([data-ui-style]) .tasks-toolbar {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur)) var(--glass-saturate);
+  box-shadow: var(--glass-rim), var(--shadow);
+}
+
+html[data-ui-style='liquid-glass'] .sidebar__link--active,
+html:not([data-ui-style]) .sidebar__link--active {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--primary);
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-rim), 0 4px 16px rgba(124, 58, 237, 0.12);
+}
+
+html[data-ui-style='liquid-glass'] .sidebar__logo,
+html:not([data-ui-style]) .sidebar__logo {
+  background: var(--gradient-primary);
+  box-shadow: var(--glow-primary);
+}
+
+html[data-ui-style='liquid-glass'] .header__avatar,
+html:not([data-ui-style]) .header__avatar {
+  background: var(--gradient-primary);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--glow-primary);
+}
+
+html[data-ui-style='liquid-glass'] .progress-bar__fill,
+html:not([data-ui-style]) .progress-bar__fill {
+  background: var(--gradient-primary);
+}
+
+html[data-ui-style='liquid-glass'] .modal,
+html:not([data-ui-style]) .modal {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-rim), var(--shadow-lg);
+}
+
+html[data-ui-style='liquid-glass'] .modal-backdrop,
+html:not([data-ui-style]) .modal-backdrop {
+  background: rgba(91, 33, 182, 0.12);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+html[data-ui-style='liquid-glass'] .welcome-minimal,
+html:not([data-ui-style]) .welcome-minimal {
+  display: none;
+}

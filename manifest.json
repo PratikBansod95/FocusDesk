@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "FocusDesk",
+  "version": "1.0.0",
+  "description": "Personal project management dashboard for your New Tab.",
+  "permissions": ["storage"],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  }
+}
+
