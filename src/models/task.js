@@ -4,7 +4,7 @@ export function createTask(input = {}) {
   const now = new Date().toISOString();
   return {
     id: input.id ?? generateId('task'),
-    title: (input.title ?? '').trim(),
+    title: input.title ?? '',
     completed: Boolean(input.completed),
     projectId: input.projectId ?? null,
     estimatedMinutes: input.estimatedMinutes ?? null,

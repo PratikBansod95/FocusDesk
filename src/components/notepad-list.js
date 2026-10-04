@@ -314,7 +314,7 @@ export function renderNotepadList(
       clearTimeout(titleSaveTimer);
       const title = input.value.trim();
       if (!title) onDelete(task.id);
-      else if (title !== task.title) void onUpdate(task.id, { title: input.value });
+      else if (title !== task.title) void onUpdate(task.id, { title: input.value.trim() });
     });
 
     li.append(check, input, meta, timeBtn);

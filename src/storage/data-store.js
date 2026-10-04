@@ -83,7 +83,7 @@ export async function updateTask(id, patch) {
     if (patch.completed === false) {
       next.completedAt = null;
     }
-    if (patch.title !== undefined) next.title = patch.title.trim();
+    if (patch.title !== undefined) next.title = patch.title;
     data.tasks[id] = next;
   });
 }
