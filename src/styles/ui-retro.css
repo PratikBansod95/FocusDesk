@@ -411,6 +411,15 @@
 }
 
 [data-ui-style='retro'] .view-tabs__btn--active {
+  border-color: color-mix(in srgb, #10b981 42%, transparent);
+  box-shadow:
+    var(--neu-inset-sm),
+    0 0 0 1px color-mix(in srgb, #34d399 15%, transparent),
+    0 0 16px color-mix(in srgb, #34d399 40%, transparent),
+    inset 0 0 14px color-mix(in srgb, #10b981 10%, transparent);
+}
+
+[data-ui-style='retro'] .view-tabs__btn:not(.view-tabs__btn--active) {
   box-shadow: var(--neu-raised-sm);
 }
 

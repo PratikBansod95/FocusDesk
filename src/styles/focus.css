@@ -127,8 +127,8 @@
 }
 
 .view-tabs__btn {
-  border: none;
-  background: transparent;
+  border: 1px solid transparent;
+  background: var(--retro-surface, var(--glass-bg-strong, #fff));
   padding: 0.72rem 1rem;
   min-height: 2.75rem;
   border-radius: calc(var(--radius-md, 14px) - 2px);
@@ -137,8 +137,9 @@
   font-size: 0.9375rem;
   letter-spacing: 0.02em;
   text-transform: none;
-  color: var(--text-muted);
+  color: var(--primary);
   cursor: pointer;
+  box-shadow: var(--neu-raised-sm, 0 2px 8px rgba(26, 46, 50, 0.08));
   transition:
     color 0.15s ease,
     box-shadow 0.15s ease,
@@ -146,14 +147,23 @@
 }
 
 .view-tabs__btn--active {
-  background: var(--retro-surface, var(--glass-bg-strong, #fff));
-  color: var(--primary);
-  box-shadow: var(--neu-raised-sm, 0 2px 8px rgba(26, 46, 50, 0.08));
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid color-mix(in srgb, #22c55e 38%, transparent);
+  box-shadow:
+    var(--neu-inset-sm, inset 0 1px 3px rgba(26, 46, 50, 0.08)),
+    0 0 0 1px color-mix(in srgb, #22c55e 12%, transparent),
+    0 0 14px color-mix(in srgb, #34d399 35%, transparent),
+    inset 0 0 12px color-mix(in srgb, #22c55e 8%, transparent);
 }
 
 .view-tabs__btn:hover:not(.view-tabs__btn--active) {
+  color: var(--primary-hover, var(--primary));
+  background: color-mix(in srgb, var(--primary) 6%, var(--retro-surface, #f5f0e6));
+}
+
+.view-tabs__btn:hover.view-tabs__btn--active {
   color: var(--text-secondary, var(--text));
-  background: color-mix(in srgb, var(--primary) 5%, transparent);
 }
 
 .view-tabs__btn:focus-visible {
@@ -162,7 +172,16 @@
 }
 
 .view-tabs__btn--active:focus-visible {
-  box-shadow: var(--neu-raised-sm), var(--focus-ring);
+  box-shadow:
+    var(--neu-inset-sm, inset 0 1px 3px rgba(26, 46, 50, 0.08)),
+    0 0 0 1px color-mix(in srgb, #22c55e 12%, transparent),
+    0 0 14px color-mix(in srgb, #34d399 35%, transparent),
+    inset 0 0 12px color-mix(in srgb, #22c55e 8%, transparent),
+    var(--focus-ring);
+}
+
+.view-tabs__btn:focus-visible:not(.view-tabs__btn--active) {
+  box-shadow: var(--neu-raised-sm, 0 2px 8px rgba(26, 46, 50, 0.08)), var(--focus-ring);
 }
 
 .focus-footer {
