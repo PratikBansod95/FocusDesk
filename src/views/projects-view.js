@@ -121,8 +121,6 @@ export function renderProjectsView(container, ctx) {
     stack.appendChild(card);
   }
 
-  container.appendChild(stack);
-
   const newProject = document.createElement('div');
   newProject.className = 'new-project';
   const input = document.createElement('input');
@@ -139,5 +137,7 @@ export function renderProjectsView(container, ctx) {
     }
   });
   newProject.appendChild(input);
-  container.appendChild(newProject);
+  stack.appendChild(newProject);
+
+  container.appendChild(stack);
 }
