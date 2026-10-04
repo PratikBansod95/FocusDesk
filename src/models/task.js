@@ -1,76 +1,40 @@
 import { generateId } from '../utils/ids.js';
-import { isOverdue, isDueToday, compareDateOnly, todayISO } from '../utils/dates.js';
 
 export function createTask(input = {}) {
   const now = new Date().toISOString();
-  const status = input.status ?? 'todo';
   return {
     id: input.id ?? generateId('task'),
     title: (input.title ?? '').trim(),
-    description: (input.description ?? '').trim(),
+    completed: Boolean(input.completed),
     projectId: input.projectId ?? null,
-    status,
-    priority: input.priority ?? 'medium',
-    startDate: input.startDate ?? null,
+    estimatedMinutes: input.estimatedMinutes ?? null,
     dueDate: input.dueDate ?? null,
-    tags: Array.isArray(input.tags) ? [...input.tags] : [],
     createdAt: input.createdAt ?? now,
-    updatedAt: input.updatedAt ?? now,
-    completedAt: status === 'completed' ? input.completedAt ?? now : input.completedAt ?? null,
+    completedAt: input.completedAt ?? (input.completed ? now : null),
+    order: input.order ?? Date.now(),
   };
 }
 
-export function taskMatchesFilter(task, filter) {
-  if (!task) return false;
-  const f = filter || {};
-  if (f.projectId && task.projectId !== f.projectId) return false;
-  if (f.status && task.status !== f.status) return false;
-  if (f.priority && task.priority !== f.priority) return false;
-  if (f.tag && !(task.tags || []).includes(f.tag)) return false;
-  if (f.unassigned && task.projectId) return false;
-  if (f.overdue && !isOverdue(task.dueDate, task.status)) return false;
-  if (f.dueToday && !isDueToday(task.dueDate, task.status)) return false;
-  if (f.completed && task.status !== 'completed') return false;
-  if (f.incomplete && task.status === 'completed') return false;
-  if (f.upcoming && (task.status === 'completed' || !task.dueDate || task.dueDate <= todayISO())) return false;
-  if (f.search) {
-    const q = f.search.toLowerCase();
-    const hay = [task.title, task.description, ...(task.tags || [])].join(' ').toLowerCase();
-    if (!hay.includes(q)) return false;
+export function sortTasks(tasks, { projectId = undefined } = {}) {
+  let list = Object.values(tasks);
+  if (projectId !== undefined) {
+    list = list.filter((t) => t.projectId === projectId);
   }
-  return true;
-}
-
-export function sortTasks(tasks, sortBy = 'dueDate') {
-  const list = [...tasks];
-  const priorityOrder = { urgent: 0, high: 1, medium: 2, low: 3 };
-  list.sort((a, b) => {
-    switch (sortBy) {
-      case 'priority':
-        return (priorityOrder[a.priority] ?? 9) - (priorityOrder[b.priority] ?? 9);
-      case 'created':
-        return (b.createdAt || '').localeCompare(a.createdAt || '');
-      case 'updated':
-        return (b.updatedAt || '').localeCompare(a.updatedAt || '');
-      case 'title':
-        return (a.title || '').localeCompare(b.title || '');
-      case 'dueDate':
-      default: {
-        const c = compareDateOnly(a.dueDate, b.dueDate);
-        if (c !== 0) return c;
-        return (priorityOrder[a.priority] ?? 9) - (priorityOrder[b.priority] ?? 9);
-      }
-    }
+  return list.sort((a, b) => {
+    if (a.completed !== b.completed) return a.completed ? 1 : -1;
+    return (a.order ?? 0) - (b.order ?? 0);
   });
-  return list;
 }
 
-export function applyStatusChange(task, newStatus) {
-  const now = new Date().toISOString();
-  return {
-    ...task,
-    status: newStatus,
-    updatedAt: now,
-    completedAt: newStatus === 'completed' ? now : null,
-  };
+export function taskMatchesSearch(task, projectName, q) {
+  if (!q) return true;
+  const hay = [task.title, projectName].filter(Boolean).join(' ').toLowerCase();
+  return hay.includes(q);
+}
+
+export function applyTaskFilter(task, filter) {
+  if (filter === 'completed') return task.completed;
+  if (filter === 'active') return !task.completed;
+  if (filter === 'unassigned') return !task.projectId;
+  return true;
 }

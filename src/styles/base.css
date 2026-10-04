@@ -116,13 +116,6 @@ button {
   text-decoration: underline;
 }
 
-pre.note-snippet__body,
-.note-card__body {
-  white-space: pre-wrap;
-  font-family: inherit;
-  margin: 0;
-}
-
 .glass {
   background: var(--glass-bg-strong);
   backdrop-filter: blur(var(--glass-blur)) var(--glass-saturate);

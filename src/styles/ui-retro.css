@@ -48,19 +48,6 @@
   --radius-md: 16px;
 }
 
-[data-ui-style='retro'][data-theme='dark'] {
-  --retro-bg: #2a2824;
-  --retro-surface: #2a2824;
-  --retro-highlight: #3a3834;
-  --retro-shadow: #1a1816;
-  --text: #ece8e0;
-  --text-muted: #a8a29a;
-  --primary: #2dd4bf;
-  --primary-hover: #5eead4;
-  --neu-raised: 8px 8px 18px var(--retro-shadow), -8px -8px 18px var(--retro-highlight);
-  --neu-inset: inset 6px 6px 14px var(--retro-shadow), inset -6px -6px 14px var(--retro-highlight);
-}
-
 [data-ui-style='retro'] .orb {
   display: none;
 }
@@ -70,8 +57,8 @@
 }
 
 [data-ui-style='retro'] .app-viewport {
-  padding: 0;
-  min-height: 100vh;
+  padding: clamp(0.25rem, 1.2vw, 0.65rem);
+  min-height: 100dvh;
 }
 
 [data-ui-style='retro'] .glass-chassis {
@@ -405,4 +392,28 @@
   backdrop-filter: none;
   border: none;
   box-shadow: var(--neu-raised);
+}
+
+/* FocusDesk workspace — Retro segmented tabs */
+[data-ui-style='retro'] .glass-chassis--focus {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+[data-ui-style='retro'] .focus-body {
+  box-shadow: var(--neu-raised);
+  border-radius: var(--radius-lg);
+}
+
+[data-ui-style='retro'] .view-tabs--primary {
+  box-shadow: var(--neu-inset-sm);
+}
+
+[data-ui-style='retro'] .view-tabs__btn--active {
+  box-shadow: var(--neu-raised-sm);
+}
+
+[data-ui-style='retro'] .view-tabs__btn:active:not(.view-tabs__btn--active) {
+  box-shadow: var(--neu-inset-sm);
 }

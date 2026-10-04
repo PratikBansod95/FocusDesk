@@ -1,86 +1,100 @@
 import assert from 'node:assert/strict';
-import { isOverdue, isDueToday, todayISO, compareDateOnly } from '../src/utils/dates.js';
-import { validateImportedData } from '../src/utils/validation.js';
-import { projectProgress } from '../src/models/project.js';
-import { taskMatchesFilter, sortTasks, createTask } from '../src/models/task.js';
-import { computeDashboardStats } from '../src/utils/stats.js';
-import { createEmptyData } from '../src/storage/defaults.js';
-import { normalizeUiStyle } from '../src/utils/ui-style.js';
+import { parseTimeInput, formatMinutes, projectProgress, sumRemainingMinutesDueOn } from '../src/utils/time.js';
+import { isProjectOutlineDueTask, taskVisibleOnMyPad, todayISO } from '../src/utils/dates.js';
+import { createTask } from '../src/models/task.js';
+import { applyTaskFilter } from '../src/models/task.js';
+import { myPadTaskIds } from '../src/components/notepad-list.js';
 
 function test(name, fn) {
-  try {
-    fn();
-    console.log(`✓ ${name}`);
-  } catch (e) {
-    console.error(`✗ ${name}`);
-    throw e;
-  }
+  fn();
+  console.log(`✓ ${name}`);
 }
 
-test('isOverdue ignores completed tasks', () => {
-  const past = '2000-01-01';
-  assert.equal(isOverdue(past, 'completed'), false);
-  assert.equal(isOverdue(past, 'todo'), true);
+test('parseTimeInput', () => {
+  assert.equal(parseTimeInput('30m'), 30);
+  assert.equal(parseTimeInput('1h'), 60);
+  assert.equal(parseTimeInput('1h 30m'), 90);
 });
 
-test('isDueToday matches calendar date', () => {
-  const t = todayISO();
-  assert.equal(isDueToday(t, 'todo'), true);
-  assert.equal(isDueToday('2099-12-31', 'todo'), false);
+test('formatMinutes', () => {
+  assert.equal(formatMinutes(90), '1h 30m');
 });
 
-test('compareDateOnly sorts nulls last', () => {
-  assert.equal(compareDateOnly(null, '2020-01-01'), 1);
-  assert.equal(compareDateOnly('2020-01-01', '2020-02-01'), -1);
-});
-
-test('projectProgress calculates percent', () => {
-  const p = 'p1';
+test('sumRemainingMinutesDueOn', () => {
+  const today = todayISO();
+  const tomorrow = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
   const tasks = {
-    a: createTask({ projectId: p, status: 'completed' }),
-    b: createTask({ projectId: p, status: 'todo' }),
+    a: createTask({ dueDate: today, estimatedMinutes: 30, completed: false }),
+    b: createTask({ dueDate: tomorrow, estimatedMinutes: 400, completed: false }),
+    c: createTask({ dueDate: today, estimatedMinutes: 15, completed: true }),
+    d: createTask({ dueDate: null, estimatedMinutes: 60, completed: false }),
   };
-  const prog = projectProgress(p, tasks);
-  assert.equal(prog.total, 2);
-  assert.equal(prog.completed, 1);
-  assert.equal(prog.percent, 50);
+  assert.equal(sumRemainingMinutesDueOn(tasks, today), 30);
 });
 
-test('task filter overdue', () => {
-  const task = createTask({ dueDate: '2000-01-01', status: 'todo' });
-  assert.equal(taskMatchesFilter(task, { overdue: true }), true);
+test('projectProgress', () => {
+  const pid = 'p1';
+  const tasks = {
+    a: createTask({ projectId: pid, completed: true }),
+    b: createTask({ projectId: pid, completed: false, estimatedMinutes: 30 }),
+  };
+  const p = projectProgress(tasks, pid);
+  assert.equal(p.completed, 1);
+  assert.equal(p.total, 2);
+  assert.equal(p.percent, 50);
 });
 
-test('sortTasks by priority', () => {
-  const low = createTask({ priority: 'low', title: 'a' });
-  const urgent = createTask({ priority: 'urgent', title: 'b' });
-  const sorted = sortTasks([low, urgent], 'priority');
-  assert.equal(sorted[0].id, urgent.id);
+test('applyTaskFilter unassigned', () => {
+  assert.equal(applyTaskFilter(createTask({ projectId: null }), 'unassigned'), true);
+  assert.equal(applyTaskFilter(createTask({ projectId: 'x' }), 'unassigned'), false);
 });
 
-test('validateImportedData accepts empty structure', () => {
-  const data = createEmptyData();
-  const r = validateImportedData(data);
-  assert.equal(r.ok, true);
+test('myPadTaskIds excludes assigned project tasks', () => {
+  const data = {
+    tasks: {
+      a: createTask({ id: 'a', projectId: null, order: 1 }),
+      b: createTask({ id: 'b', projectId: 'p1', order: 2 }),
+    },
+  };
+  assert.deepEqual(myPadTaskIds(data), ['a']);
 });
 
-test('validateImportedData rejects invalid JSON shape', () => {
-  assert.equal(validateImportedData(null).ok, false);
+test('isProjectOutlineDueTask', () => {
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const tomorrow = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
+  assert.equal(isProjectOutlineDueTask(createTask({ dueDate: today })), true);
+  assert.equal(isProjectOutlineDueTask(createTask({ dueDate: tomorrow })), false);
+  assert.equal(isProjectOutlineDueTask(createTask({ dueDate: null })), false);
+  assert.equal(
+    isProjectOutlineDueTask(createTask({ dueDate: yesterday, completed: false })),
+    true
+  );
+  assert.equal(
+    isProjectOutlineDueTask(createTask({ dueDate: yesterday, completed: true })),
+    false
+  );
 });
 
-test('normalizeUiStyle', () => {
-  assert.equal(normalizeUiStyle('retro'), 'retro');
-  assert.equal(normalizeUiStyle('minimal'), 'minimal');
-  assert.equal(normalizeUiStyle('unknown'), 'liquid-glass');
-});
-
-test('dashboard stats from data', () => {
-  const data = createEmptyData();
-  data.projects.p1 = { id: 'p1', name: 'X', status: 'active' };
-  data.tasks.t1 = createTask({ status: 'completed', dueDate: todayISO() });
-  const stats = computeDashboardStats(data);
-  assert.equal(stats.completed, 1);
-  assert.equal(stats.activeProjects, 1);
+test('taskVisibleOnMyPad by date', () => {
+  const today = todayISO();
+  const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const open = createTask({ projectId: null, completed: false });
+  const doneToday = createTask({
+    projectId: null,
+    completed: true,
+    completedAt: `${today}T15:00:00.000Z`,
+  });
+  const doneYesterday = createTask({
+    projectId: null,
+    completed: true,
+    completedAt: `${yesterday}T15:00:00.000Z`,
+  });
+  assert.equal(taskVisibleOnMyPad(open, today), true);
+  assert.equal(taskVisibleOnMyPad(doneToday, today), true);
+  assert.equal(taskVisibleOnMyPad(doneYesterday, today), false);
+  assert.equal(taskVisibleOnMyPad(doneYesterday, yesterday), true);
+  assert.equal(taskVisibleOnMyPad(createTask({ projectId: 'p1', completed: false }), today), false);
 });
 
 console.log('\nAll tests passed.');

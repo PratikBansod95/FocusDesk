@@ -1,0 +1,820 @@
+/* FocusDesk workspace — notepad UI (theme tokens from themes.css) */
+
+:root {
+  --focus-layout-max: clamp(18rem, min(94vw, 100% - 1.5rem), 56rem);
+  --focus-layout-pad: clamp(0.65rem, 2.5vw, 1.5rem);
+}
+
+.glass-chassis--focus {
+  width: 100%;
+  min-height: calc(100dvh - 0.5rem);
+  border-radius: var(--radius-xl, 24px);
+  box-sizing: border-box;
+}
+
+.focus-app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--focus-layout-max);
+  margin: 0 auto;
+  min-height: calc(100dvh - 0.5rem);
+  display: flex;
+  flex-direction: column;
+  padding: var(--focus-layout-pad) var(--focus-layout-pad) clamp(3.25rem, 7vh, 4.5rem);
+  box-sizing: border-box;
+}
+
+.focus-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+  padding: 0 0.15rem;
+}
+
+.focus-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 12rem;
+  max-height: calc(100dvh - clamp(5.5rem, 14vh, 8rem));
+  border: none;
+  border-radius: var(--radius-lg, 20px);
+  background: var(--retro-surface, var(--glass-bg-strong, #f5f0e6));
+  overflow: hidden;
+  box-shadow: var(--neu-raised-sm, 0 4px 20px rgba(26, 46, 50, 0.06));
+  padding: clamp(0.75rem, 2vw, 1rem);
+  gap: clamp(0.75rem, 2vw, 1rem);
+}
+
+.focus-tab-bar {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.focus-panel {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  min-height: 0;
+  flex: 1;
+  box-shadow: none;
+}
+
+.focus-panel--workspace {
+  padding: 0;
+}
+
+.focus-brand {
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.03em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.view-tabs--primary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: var(--radius-md, 14px);
+  background: var(--retro-surface, color-mix(in srgb, var(--text) 3%, transparent));
+  box-shadow: var(--neu-inset-sm, inset 0 1px 3px rgba(26, 46, 50, 0.08));
+}
+
+.view-tabs__btn {
+  border: none;
+  background: transparent;
+  padding: 0.72rem 1rem;
+  min-height: 2.75rem;
+  border-radius: calc(var(--radius-md, 14px) - 2px);
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.view-tabs__btn--active {
+  background: var(--retro-surface, var(--glass-bg-strong, #fff));
+  color: var(--primary);
+  box-shadow: var(--neu-raised-sm, 0 2px 8px rgba(26, 46, 50, 0.08));
+}
+
+.view-tabs__btn:hover:not(.view-tabs__btn--active) {
+  color: var(--text-secondary, var(--text));
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+}
+
+.view-tabs__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring, 0 0 0 3px rgba(13, 71, 79, 0.25));
+}
+
+.view-tabs__btn--active:focus-visible {
+  box-shadow: var(--neu-raised-sm), var(--focus-ring);
+}
+
+.focus-main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.focus-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--text) 22%, transparent) transparent;
+}
+
+.focus-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.focus-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text) 18%, transparent);
+  border-radius: 999px;
+}
+
+.focus-footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(var(--focus-layout-max), calc(100% - 1.5rem));
+  padding: 0.65rem clamp(0.65rem, 2vw, 1rem);
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.focus-footer__pill {
+  pointer-events: auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary, var(--text));
+  background: color-mix(in srgb, var(--primary-soft, rgba(13, 71, 79, 0.12)) 55%, var(--retro-surface, #f5f0e6));
+  backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, var(--primary, #0d474f) 22%, transparent);
+  border-radius: var(--radius-pill, 999px);
+  padding: 0.45rem 1.05rem;
+  box-shadow: var(--shadow, 0 2px 8px rgba(0, 0, 0, 0.06));
+}
+
+.focus-footer__pill--over-cap {
+  color: var(--danger, #c2410c);
+  background: color-mix(in srgb, var(--danger, #c2410c) 14%, var(--retro-surface, #f5f0e6));
+  border-color: color-mix(in srgb, var(--danger, #c2410c) 45%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--danger, #c2410c) 18%, transparent),
+    var(--shadow, 0 2px 10px rgba(0, 0, 0, 0.08));
+}
+
+.focus-section {
+  margin-bottom: 2rem;
+}
+
+.my-pad-sheet {
+  --pad-line: 2.625rem;
+  --pad-min-lines: 7;
+  --pad-rule: color-mix(in srgb, var(--text) 11%, transparent);
+  position: relative;
+  cursor: text;
+}
+
+.project-card__sheet.my-pad-sheet {
+  min-height: calc(var(--pad-line) * var(--pad-min-lines, 7));
+}
+
+.my-pad-sheet:not(.project-card__sheet) {
+  min-height: calc(var(--pad-line) * var(--pad-min-lines));
+  padding: 0.35rem 0.85rem 0.75rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
+  background-color: color-mix(in srgb, var(--glass-bg-strong, #fff) 40%, transparent);
+}
+
+/* Per-row ruled lines (My Pad, Projects, Tasks outline — scrolls with content) */
+.my-pad-sheet .notepad-list__ul {
+  border-top: 1px solid var(--pad-rule);
+}
+
+.my-pad-sheet .notepad-row {
+  min-height: var(--pad-line);
+  height: var(--pad-line);
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid var(--pad-rule);
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.my-pad-sheet .notepad-row__input {
+  font-size: 1rem;
+  line-height: var(--pad-line);
+  height: var(--pad-line);
+  padding: 0;
+}
+
+.my-pad-sheet .notepad-row:focus-within,
+.my-pad-sheet .notepad-row--has-meta {
+  height: auto;
+  min-height: var(--pad-line);
+}
+
+.focus-section__title {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.focus-section--outline {
+  padding-top: 0.5rem;
+}
+
+/* Tasks & Projects workspace cards */
+.focus-view--tasks,
+.focus-view--projects {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.focus-view--tasks .project-card:not(.project-card--outline) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.focus-view--tasks .project-card:not(.project-card--outline) .project-card__sheet {
+  max-height: min(42vh, clamp(14rem, 32vh, 24rem));
+}
+
+.focus-view--tasks .project-card--outline {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.focus-view--tasks .project-card--outline .project-outline {
+  max-height: min(36vh, clamp(12rem, 28vh, 20rem));
+}
+
+.focus-view--projects .project-card__sheet {
+  max-height: min(36vh, clamp(12rem, 28vh, 20rem));
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --focus-layout-max: min(60rem, calc(100vw - 3rem));
+  }
+
+  .focus-view--tasks .project-card:not(.project-card--outline) .project-card__sheet {
+    max-height: min(48vh, 28rem);
+  }
+
+  .focus-view--tasks .project-card--outline .project-outline {
+    max-height: min(40vh, 22rem);
+  }
+
+  .focus-view--projects .project-card__sheet {
+    max-height: min(40vh, 22rem);
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --focus-layout-max: min(68rem, calc(100vw - 4rem));
+  }
+}
+
+.project-card__sheet.focus-scroll,
+.project-outline.focus-scroll {
+  min-height: 0;
+}
+
+.focus-empty {
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* Notepad rows */
+.notepad-list__ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notepad-list--pad .notepad-list__ul {
+  min-height: calc(var(--pad-line, 2.625rem) * var(--pad-min-lines, 7));
+}
+
+.notepad-list--pad-tasks-only .notepad-list__ul {
+  min-height: 0;
+}
+
+.notepad-list--pad .notepad-row--slot .notepad-row__input::placeholder {
+  color: transparent;
+}
+
+.notepad-list--pad .notepad-row--slot:focus-within .notepad-row__input::placeholder,
+.notepad-list--pad .notepad-row--draft .notepad-row__input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.55;
+}
+
+.notepad-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.my-pad-sheet .notepad-row {
+  gap: 0.5rem 0.65rem;
+  border-bottom-color: var(--pad-rule);
+}
+
+.notepad-list--pad .notepad-row__check {
+  align-self: center;
+}
+
+.notepad-list--pad .notepad-row__check--ghost .notepad-row__check-icon {
+  opacity: 0.45;
+}
+
+.notepad-list--pad .notepad-row__meta {
+  display: none;
+  gap: 0.15rem;
+}
+
+.notepad-list--pad .notepad-row:focus-within .notepad-row__meta,
+.notepad-list--pad .notepad-row--has-meta .notepad-row__meta,
+.notepad-list--pad .notepad-row--draft:focus-within .notepad-row__meta {
+  display: flex;
+}
+
+.notepad-list--pad .notepad-row__chip--pad {
+  font-size: 0.68rem;
+  max-width: 4.5rem;
+}
+
+.notepad-list--pad .notepad-row__time {
+  opacity: 0.35;
+  font-size: 0.72rem;
+}
+
+.notepad-list--pad .notepad-row:hover .notepad-row__time,
+.notepad-list--pad .notepad-row:focus-within .notepad-row__time,
+.notepad-list--pad .notepad-row--has-time .notepad-row__time,
+.notepad-list--pad .notepad-row--draft:focus-within .notepad-row__time {
+  opacity: 1;
+}
+
+.notepad-row--done .notepad-row__input {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+.notepad-row--overdue .notepad-row__chip:first-child {
+  color: var(--danger, #c0392b);
+}
+
+.notepad-row__check {
+  width: 1.35rem;
+  height: 1.35rem;
+  border: none;
+  background: transparent;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.notepad-row__check-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 4px;
+  border: 1.5px solid color-mix(in srgb, var(--text) 35%, transparent);
+}
+
+.notepad-row__check-icon--on {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.notepad-row__check--ghost {
+  opacity: 0.35;
+}
+
+.notepad-row__input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  padding: 0.35rem 0;
+  color: var(--text);
+  min-width: 0;
+}
+
+.notepad-row__input:focus {
+  outline: none;
+}
+
+.notepad-row__input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.65;
+}
+
+.notepad-row__meta {
+  display: none;
+  gap: 0.25rem;
+}
+
+.notepad-row:hover .notepad-row__meta,
+.notepad-row:focus-within .notepad-row__meta {
+  display: flex;
+}
+
+@media (min-width: 640px) {
+  .notepad-row__meta {
+    display: flex;
+  }
+}
+
+.notepad-row__chip {
+  border: none;
+  background: transparent;
+  font-size: 0.72rem;
+  color: var(--text-secondary, var(--text-muted));
+  padding: 0.15rem 0.35rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  max-width: 6rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notepad-row__chip--muted {
+  opacity: 0.55;
+}
+
+.notepad-row__chip:hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.notepad-row__time {
+  border: none;
+  background: transparent;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 0.2rem 0.35rem;
+  min-width: 3.25rem;
+  text-align: right;
+  border-radius: 6px;
+}
+
+.notepad-row__time--empty {
+  opacity: 0.45;
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+}
+
+.notepad-row__time:hover {
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.notepad-row__time--ghost {
+  visibility: hidden;
+}
+
+/* Project outline (Tasks tab) */
+.project-outline__group {
+  margin-bottom: 1rem;
+}
+
+.project-outline__group:last-child {
+  margin-bottom: 0;
+}
+
+.project-outline__name {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.project-outline__sheet {
+  margin-top: 0;
+  --pad-min-lines: 3;
+}
+
+.project-outline__sheet.my-pad-sheet {
+  padding: 0.15rem 0.5rem 0.35rem;
+  border-radius: 12px;
+  cursor: default;
+}
+
+/* Projects tab */
+.projects-empty {
+  margin: 0.5rem 0 0.25rem;
+  text-align: center;
+  font-size: 0.88rem;
+}
+
+.project-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-card {
+  padding: 1rem 1rem 1.05rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
+  background: color-mix(in srgb, var(--glass-bg-strong, #fff) 38%, transparent);
+}
+
+.project-card__head {
+  margin-bottom: 0.5rem;
+}
+
+.project-card__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.project-card__title-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+  margin-right: 0.35rem;
+}
+
+.my-pad-date-btn {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+  color: var(--text-muted);
+  box-shadow: var(--neu-raised-sm, none);
+}
+
+.my-pad-date-btn:hover {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+.my-pad-date-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.my-pad-history-empty {
+  padding: 0.75rem 0.25rem;
+  text-align: center;
+  font-size: 0.86rem;
+}
+
+.project-card__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  min-width: 0;
+}
+
+.project-card__title-input {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 6px;
+}
+
+.project-card__stat {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.project-card__progress {
+  margin-top: 0.45rem;
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  overflow: hidden;
+}
+
+.project-card__progress-fill {
+  height: 100%;
+  background: color-mix(in srgb, var(--primary) 65%, transparent);
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+.project-card__sheet {
+  margin-top: 0.65rem;
+  --pad-min-lines: 5;
+  min-height: calc(var(--pad-line) * var(--pad-min-lines));
+  padding: 0.2rem 0.55rem 0.45rem;
+  border-radius: 12px;
+  border-color: color-mix(in srgb, var(--text) 7%, transparent);
+  background-color: color-mix(in srgb, var(--glass-bg-strong, #fff) 28%, transparent);
+}
+
+.project-card--outline .project-card__head--compact {
+  margin-bottom: 0.35rem;
+}
+
+.project-card--outline .project-outline {
+  margin: 0;
+}
+
+.project-card--outline .focus-empty {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.new-project {
+  margin-top: 1rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 14px;
+  border: 1px dashed color-mix(in srgb, var(--text) 16%, transparent);
+  background: color-mix(in srgb, var(--text) 2.5%, transparent);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.new-project__input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 0.9rem;
+  padding: 0.15rem 0;
+  color: var(--text-muted);
+}
+
+.new-project__input:focus {
+  outline: none;
+  color: var(--text);
+}
+
+.new-project__input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.focus-app input[type='text']:focus,
+.focus-app input[type='text']:focus-visible,
+.focus-app .notepad-row__input:focus,
+.focus-app .notepad-row__input:focus-visible,
+.focus-popover .input:focus,
+.focus-popover .input:focus-visible,
+.focus-popover input[type='date']:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--glass-border-subtle, rgba(0, 0, 0, 0.08));
+}
+
+.focus-app .my-pad-sheet:focus-within,
+.focus-app .project-card__sheet:focus-within {
+  box-shadow: none;
+}
+
+/* Popovers */
+.focus-popover {
+  background: var(--glass-bg-strong, #fff);
+  border: 1px solid var(--glass-border-subtle);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem;
+  min-width: 10rem;
+}
+
+.time-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.time-picker__opt {
+  border: 1px solid var(--glass-border-subtle);
+  background: transparent;
+  border-radius: 8px;
+  padding: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.time-picker__opt:hover {
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.time-picker__custom {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.time-picker__clear {
+  width: 100%;
+  margin-top: 0.35rem;
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0.35rem;
+}
+
+.meta-picker__title {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.meta-picker__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.meta-picker__item:hover,
+.meta-picker__item--active {
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+.meta-picker__custom {
+  margin-top: 0.35rem;
+}
+
+.btn--sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.btn--ghost {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .focus-app {
+    padding-bottom: 5rem;
+  }
+
+  .notepad-row {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .notepad-row__meta {
+    grid-column: 2 / -1;
+    justify-content: flex-start;
+    padding-left: 1.85rem;
+  }
+}
