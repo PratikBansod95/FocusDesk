@@ -12,7 +12,7 @@ export function renderProjectsView(container, ctx) {
   container.className = 'focus-view focus-view--projects';
 
   const stack = document.createElement('div');
-  stack.className = 'project-stack';
+  stack.className = 'project-stack focus-scroll';
 
   if (!projects.length) {
     const empty = document.createElement('p');
@@ -86,7 +86,7 @@ export function renderProjectsView(container, ctx) {
     card.appendChild(head);
 
     const sheet = document.createElement('div');
-    sheet.className = 'project-card__sheet my-pad-sheet focus-scroll';
+    sheet.className = 'project-card__sheet my-pad-sheet';
     sheet.setAttribute('role', 'group');
     sheet.setAttribute('aria-label', `${project.name} tasks`);
 
