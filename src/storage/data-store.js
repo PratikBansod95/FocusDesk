@@ -52,12 +52,12 @@ export function subscribe(fn) {
   return () => listeners.delete(fn);
 }
 
-export async function mutate(mutator) {
+export async function mutate(mutator, { notify: shouldNotify = true } = {}) {
   const draft = structuredClone(getData());
   await mutator(draft);
   cache = draft;
   await persist();
-  notify();
+  if (shouldNotify) notify();
   return cache;
 }
 
@@ -72,20 +72,23 @@ export async function addTaskRecord(task) {
   return task;
 }
 
-export async function updateTask(id, patch) {
-  await mutate((data) => {
-    const t = data.tasks[id];
-    if (!t) return;
-    const next = { ...t, ...patch };
-    if (patch.completed === true && !t.completed) {
-      next.completedAt = new Date().toISOString();
-    }
-    if (patch.completed === false) {
-      next.completedAt = null;
-    }
-    if (patch.title !== undefined) next.title = patch.title;
-    data.tasks[id] = next;
-  });
+export async function updateTask(id, patch, { notify = true } = {}) {
+  await mutate(
+    (data) => {
+      const t = data.tasks[id];
+      if (!t) return;
+      const next = { ...t, ...patch };
+      if (patch.completed === true && !t.completed) {
+        next.completedAt = new Date().toISOString();
+      }
+      if (patch.completed === false) {
+        next.completedAt = null;
+      }
+      if (patch.title !== undefined) next.title = patch.title;
+      data.tasks[id] = next;
+    },
+    { notify }
+  );
 }
 
 export async function deleteTask(id) {

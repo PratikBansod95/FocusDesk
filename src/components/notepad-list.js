@@ -7,6 +7,22 @@ import { closeOpenPopover } from './popover.js';
 /** Ruled lines shown on My Pad (matches default CSS min height). */
 export const MY_PAD_MIN_LINES = 7;
 
+/** Debounced title saves keyed by task — cleared when a row re-mounts. */
+const pendingTitleTimers = new Map();
+
+function clearPendingTitleSave(taskId) {
+  const t = pendingTitleTimers.get(taskId);
+  if (t) {
+    clearTimeout(t);
+    pendingTitleTimers.delete(taskId);
+  }
+}
+
+function readTaskTitleInput(taskId) {
+  const row = document.querySelector(`[data-task-id="${CSS.escape(taskId)}"] .notepad-row__input`);
+  return row?.value ?? null;
+}
+
 export function renderNotepadList(
   container,
   {
@@ -228,20 +244,31 @@ export function renderNotepadList(
     });
 
     let promotePromise = null;
-    let titleSaveTimer = null;
 
-    function flushTitleSave() {
+    function flushTitleSave({ notify = true } = {}) {
       if (!task) return;
-      clearTimeout(titleSaveTimer);
-      titleSaveTimer = null;
-      void onUpdate(task.id, { title: input.value });
+      clearPendingTitleSave(task.id);
+      const title = input.isConnected ? input.value : readTaskTitleInput(task.id);
+      if (title == null) return;
+      void onUpdate(task.id, { title }, { notify });
     }
 
     function scheduleTitleSave() {
       if (!task) return;
-      clearTimeout(titleSaveTimer);
-      titleSaveTimer = setTimeout(flushTitleSave, 320);
+      clearPendingTitleSave(task.id);
+      const taskId = task.id;
+      pendingTitleTimers.set(
+        taskId,
+        setTimeout(() => {
+          pendingTitleTimers.delete(taskId);
+          const title = readTaskTitleInput(taskId);
+          if (title == null) return;
+          void onUpdate(taskId, { title }, { notify: false });
+        }, 320)
+      );
     }
+
+    if (task?.id) clearPendingTitleSave(task.id);
 
     async function promoteEmptyLineIfNeeded() {
       if (!isEmptyLine || !onCreate) return null;
@@ -288,7 +315,7 @@ export function renderNotepadList(
           return;
         }
         await onUpdate(task.id, { title: input.value });
-        flushTitleSave();
+        flushTitleSave({ notify: true });
         if (padTasksOnly) return;
         const created = await onCreate({
           title: '',
@@ -311,10 +338,13 @@ export function renderNotepadList(
         void promoteEmptyLineIfNeeded();
         return;
       }
-      clearTimeout(titleSaveTimer);
       const title = input.value.trim();
-      if (!title) onDelete(task.id);
-      else if (title !== task.title) void onUpdate(task.id, { title: input.value.trim() });
+      if (!title) {
+        clearPendingTitleSave(task.id);
+        onDelete(task.id);
+        return;
+      }
+      flushTitleSave({ notify: true });
     });
 
     li.append(check, input, meta, timeBtn);

@@ -61,7 +61,7 @@ function taskHandlers() {
       await addTaskRecord(task);
       return task;
     },
-    onUpdate: (id, patch) => updateTask(id, patch),
+    onUpdate: (id, patch, opts) => updateTask(id, patch, opts),
     onDelete: (id) => deleteTask(id),
     onToggle: (id, completed) => updateTask(id, { completed }),
     onRequestFocus: (id) => {
